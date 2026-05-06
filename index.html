@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>COD Empire – Mehdi</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="COD Empire"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#060A12"/>
+<link id="manifest-link" rel="manifest"/>
+<link id="apple-touch-icon-link" rel="apple-touch-icon"/>
+<link id="favicon-link" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060A12;--s1:#0C1220;--s2:#121A2C;--s3:#1A2438;
+  --border:rgba(255,255,255,0.06);--text:#EEF2FF;--muted:#4A5A7A;--muted2:#7A8AA0;
+  --green:#00E5A0;--blue:#4F8EFF;--gold:#FFD166;--red:#FF5E5E;--purple:#A78BFA;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.hdr{background:linear-gradient(180deg,#090E1A,var(--bg));border-bottom:1px solid var(--border);padding:14px 16px 0;position:sticky;top:0;z-index:300}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-1px;background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand-sub{font-size:9px;letter-spacing:2px;color:var(--muted)}
+.month-nav{display:flex;align-items:center;gap:6px}
+.mbtn{width:26px;height:26px;border-radius:7px;background:var(--s2);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.mlbl{display:flex;flex-direction:column;align-items:center;gap:1px}
+.mlbl-m{font-size:12px;font-weight:700;font-family:'DM Mono',monospace}
+.mlbl-y{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:1px}
+
+/* TABS */
+.tabs{display:flex;gap:2px;padding:3px;background:var(--s2);border-radius:10px;margin-bottom:0}
+.tab{flex:1;padding:8px 2px;border-radius:8px;border:none;cursor:pointer;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;letter-spacing:.3px;transition:all .2s;background:transparent;color:var(--muted)}
+.tab.active{color:#fff}
+.tab[data-t="dashboard"].active{background:linear-gradient(135deg,#0A3F6E,#0A5C3E)}
+.tab[data-t="simulate"].active{background:linear-gradient(135deg,#3B1FA8,#1A3FA8)}
+.tab[data-t="jars"].active{background:linear-gradient(135deg,#7C3AED,#2563EB)}
+.tab[data-t="settings"].active{background:linear-gradient(135deg,#B45309,#0F766E)}
+
+/* COUNTRY BAR */
+.country-bar{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:var(--s1);border-bottom:1px solid var(--border);scrollbar-width:none}
+.country-bar::-webkit-scrollbar{display:none}
+.c-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 12px;border-radius:10px;border:1px solid var(--border);background:var(--s2);cursor:pointer;white-space:nowrap;transition:all .2s;min-width:56px;font-family:'DM Sans',sans-serif}
+.c-btn.active{border-color:var(--green);background:rgba(0,229,160,0.1)}
+.c-flag{font-size:18px}
+.c-name{font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--muted);font-family:'Syne',sans-serif}
+.c-btn.active .c-name{color:var(--green)}
+
+.content{padding:12px 16px 120px}
+.sec{display:none}.sec.active{display:block}
+
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:15px;margin-bottom:10px}
+.card-title{font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:700;margin-bottom:12px;font-family:'Syne',sans-serif}
+
+/* HERO */
+.hero{border-radius:20px;padding:18px;margin-bottom:10px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.04),transparent 70%)}
+.hero-label{font-size:10px;letter-spacing:2px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif}
+.hero-amount{font-family:'DM Mono',monospace;font-size:36px;font-weight:500;margin-bottom:14px;line-height:1}
+.hero-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.hero-stat label{font-size:9px;letter-spacing:1.5px;opacity:.65}
+.hero-stat p{font-size:14px;font-weight:700;font-family:'DM Mono',monospace;margin-top:2px}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.stat-box{border-radius:12px;padding:11px;border:1px solid var(--border)}
+.stat-box .lbl{font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:3px;font-family:'Syne',sans-serif}
+.stat-box .val{font-family:'DM Mono',monospace;font-size:18px;font-weight:500}
+.stat-box .sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* FIELDS */
+.field{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.field:focus{border-color:var(--blue)}
+.field-lbl{font-size:11px;color:var(--muted2);margin-bottom:3px;display:block;letter-spacing:.5px}
+.field-wrap{margin-bottom:9px}
+.field-row{display:flex;gap:8px}
+.field-row .field-wrap{flex:1;margin-bottom:0}
+
+/* SLIDER */
+.slider-wrap{margin-bottom:9px}
+.slider-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.slider-hdr .field-lbl{margin-bottom:0}
+.slider-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:700}
+input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;border:none;cursor:pointer}
+
+/* PROG */
+.prog{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin:6px 0 4px}
+.prog-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.prog-meta{display:flex;justify-content:space-between}
+.prog-meta span{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:3px}
+.funnel-step{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;border:1px solid var(--border)}
+.f-ico{font-size:17px;min-width:20px}
+.f-text{flex:1}
+.f-lbl{font-size:13px;font-weight:600;font-family:'Syne',sans-serif}
+.f-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.f-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
+.f-arrow{text-align:center;color:var(--muted);font-size:12px;padding:0}
+
+/* COST ROWS */
+.cost-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.cost-row:last-child{border-bottom:none}
+.cost-name{font-size:12px;color:var(--muted2)}
+.cost-val{font-family:'DM Mono',monospace;font-size:13px}
+
+/* SPLIT */
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.split-card{border-radius:12px;padding:11px;border:1px solid}
+.split-lbl{font-size:9px;letter-spacing:1.5px;margin-bottom:4px;font-family:'Syne',sans-serif}
+.split-val{font-family:'DM Mono',monospace;font-size:17px;font-weight:500}
+.split-sub{font-size:10px;margin-top:3px;opacity:.7}
+
+/* SIM TABLE */
+.sim-table{width:100%;border-collapse:collapse;font-size:11px}
+.sim-table th{padding:8px 5px;text-align:center;font-size:10px;letter-spacing:1px;color:var(--muted);font-family:'Syne',sans-serif;border-bottom:1px solid var(--border)}
+.sim-table td{padding:7px 5px;text-align:center;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.sim-table tr.cur td{background:rgba(0,229,160,0.08);color:var(--green);font-weight:700}
+.neg{color:var(--red)}.pos{color:var(--green)}.neu{color:var(--gold)}
+
+/* JARS */
+.jar-card{background:var(--s1);border:1px solid var(--border);border-radius:13px;padding:13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.jar-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.jar-left{display:flex;align-items:center;gap:9px}
+.jar-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.jar-name{font-size:13px;font-weight:700;font-family:'Syne',sans-serif}
+.jar-pct{font-size:10px;color:var(--muted);margin-top:1px}
+.jar-amount{font-family:'DM Mono',monospace;font-size:15px;font-weight:500}
+.jar-sub{font-size:10px;margin-top:2px;color:var(--muted)}
+.ex-panel{margin-top:9px;padding-top:9px;border-top:1px solid var(--border);display:none}
+.ex-panel.open{display:block}
+.ex-ttl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;font-family:'Syne',sans-serif}
+.ex-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.ex-chip{padding:4px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.tip{border-left:2px solid;border-radius:0 8px 8px 0;padding:8px 10px;font-size:12px;line-height:1.6}
+.tip strong{display:block;font-size:10px;letter-spacing:.5px;margin-bottom:2px;font-family:'Syne',sans-serif}
+
+/* TOOLS */
+.tool-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.tool-item:last-child{border-bottom:none}
+.tool-name{font-size:13px}
+.tool-cost{font-family:'DM Mono',monospace;font-size:13px;color:var(--red)}
+.del-btn{width:24px;height:24px;border-radius:6px;background:rgba(255,94,94,0.12);border:none;color:var(--red);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+
+/* BTN */
+.btn{width:100%;padding:12px;border:none;border-radius:11px;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;letter-spacing:.5px;margin-top:6px;color:#fff;transition:opacity .2s}
+.btn:active{opacity:.85}
+.btn-green{background:linear-gradient(135deg,#065F46,#0A9E6E)}
+.btn-sm{width:auto;padding:7px 14px;margin-top:0;font-size:11px}
+
+/* FLOW */
+.flow-step{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s2);border-radius:11px;border:1px solid var(--border);margin-bottom:3px}
+.flow-ico{font-size:19px;min-width:22px}
+.flow-body{flex:1}
+.flow-lbl{font-size:12px;font-weight:700;font-family:'Syne',sans-serif}
+.flow-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.flow-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500}
+.flow-arrow{text-align:center;color:var(--muted);font-size:16px;margin:2px 0}
+
+/* SAVE BADGE */
+#save-badge{position:fixed;bottom:20px;right:16px;background:rgba(0,229,160,0.12);border:1px solid rgba(0,229,160,0.3);color:var(--green);padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;font-family:'Syne',sans-serif}
+
+/* INSTALL BTN */
+#install-btn{display:flex;position:fixed;bottom:20px;left:16px;align-items:center;gap:6px;background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.35);border-radius:20px;padding:8px 14px;cursor:pointer;z-index:998}
+@media (display-mode: standalone){#install-btn{display:none !important}}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--s2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="save-badge">✅ Auto-saved</div>
+<div id="install-btn" onclick="installApp()">
+  <span style="font-size:14px">📲</span>
+  <span style="font-size:12px;font-weight:700;color:#FFD166;font-family:'Syne',sans-serif">Install App</span>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="brand-name">💎 COD Empire</div>
+      <div class="brand-sub">MEHDI · GCC DROPSHIPPING</div>
+    </div>
+    <div class="month-nav">
+      <button class="mbtn" onclick="chMo(-1)">‹</button>
+      <div class="mlbl">
+        <div class="mlbl-m" id="mlbl-m">May</div>
+        <div class="mlbl-y" id="mlbl-y">2026</div>
+      </div>
+      <button class="mbtn" onclick="chMo(1)">›</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-t="dashboard" onclick="sw('dashboard',this)">📊 Dash</button>
+    <button class="tab" data-t="simulate" onclick="sw('simulate',this)">🔢 Simulate</button>
+    <button class="tab" data-t="jars" onclick="sw('jars',this)">🏦 6 Jars</button>
+    <button class="tab" data-t="settings" onclick="sw('settings',this)">⚙️ Settings</button>
+  </div>
+</div>
+
+<!-- COUNTRY BAR -->
+<div class="country-bar" id="countryBar"></div>
+
+<div class="content">
+
+  <!-- DASHBOARD -->
+  <div class="sec active" id="sec-dashboard">
+    <div class="hero" style="background:linear-gradient(135deg,#061A10,#061020);border:1px solid rgba(0,229,160,0.2)">
+      <div class="hero-label" style="color:var(--green)">NET PROFIT — <span id="d-country-name">UAE 🇦🇪</span></div>
+      <div class="hero-amount" style="color:var(--green)" id="d-profit">$0.00</div>
+      <div class="hero-row">
+        <div class="hero-stat"><label style="color:var(--blue)">REVENUE</label><p style="color:var(--blue)" id="d-revenue">$0</p></div>
+        <div class="hero-stat"><label style="color:var(--red)">ALL COSTS</label><p style="color:var(--red)" id="d-costs">$0</p></div>
+        <div class="hero-stat" style="text-align:right"><label style="color:var(--gold)">MARGIN</label><p style="color:var(--gold)" id="d-margin">0%</p></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
+        <div style="background:rgba(79,142,255,0.15);border:1px solid rgba(79,142,255,0.3);border-radius:10px;padding:9px;text-align:center">
+          <div style="font-size:9px;letter-spacing:1.5px;color:var(--blue);margin-bottom:3px;font-family:'Syne',sans-serif">CONF RATE</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--blue)" id="d-confrate">0%</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px">Confirmed</div>
+        </div>
+        <div style="background:rgba(0,229,160,0.15);border:1px solid rgba(0,229,160,0.3);border-radius:10px;padding:9px;text-align:center">
+          <div style="font-size:9px;letter-spacing:1.5px;color:var(--green);margin-bottom:3px;font-family:'Syne',sans-serif">DEL RATE</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--green)" id="d-delrate">0%</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px">Delivered</div>
+        </div>
+        <div style="background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.3);border-radius:10px;padding:9px;text-align:center">
+          <div style="font-size:9px;letter-spacing:1.5px;color:var(--gold);margin-bottom:3px;font-family:'Syne',sans-serif">MAX CPL</div>
+          <div style="font-family:'DM Mono',monospace;font-size:19px;font-weight:700;color:var(--gold)" id="d-maxcpl">$0</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px">Break-even</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="d-tools-warning" style="display:none;background:rgba(255,94,94,0.08);border:1px solid rgba(255,94,94,0.25);border-radius:12px;padding:11px 13px;margin-bottom:10px;font-size:13px;color:var(--red)">
+      ⚠️ Monthly tools: <span id="d-tools-warn" style="font-family:'DM Mono',monospace;font-weight:700"></span> deducted
+    </div>
+
+    <div class="card">
+      <div class="card-title">SALES FUNNEL</div>
+      <div id="d-funnel"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">COST BREAKDOWN</div>
+      <div id="d-costs-bd"></div>
+    </div>
+
+
+
+    <div class="card">
+      <div class="card-title">PROFIT SPLIT</div>
+      <div class="split-grid">
+        <div class="split-card" style="background:rgba(79,142,255,0.08);border-color:rgba(79,142,255,0.25)">
+          <div class="split-lbl" style="color:var(--blue)">🔄 REINVEST</div>
+          <div class="split-val" style="color:var(--blue)" id="d-reinvest">$0</div>
+          <div class="split-sub" style="color:var(--blue)">50% → Ads & Stock</div>
+        </div>
+        <div class="split-card" style="background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.25)">
+          <div class="split-lbl" style="color:var(--green)">💰 SALARY</div>
+          <div class="split-val" style="color:var(--green)" id="d-salary">$0</div>
+          <div class="split-sub" style="color:var(--green)">30% → 6 Jars</div>
+        </div>
+        <div class="split-card" style="background:rgba(255,209,102,0.08);border-color:rgba(255,209,102,0.25)">
+          <div class="split-lbl" style="color:var(--gold)">🏦 BIZ SAVINGS</div>
+          <div class="split-val" style="color:var(--gold)" id="d-bizsav">$0</div>
+          <div class="split-sub" style="color:var(--gold)">10% → Emergency</div>
+        </div>
+        <div class="split-card" style="background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.25)">
+          <div class="split-lbl" style="color:var(--purple)">📚 BIZ EDU</div>
+          <div class="split-val" style="color:var(--purple)" id="d-bizeduc">$0</div>
+          <div class="split-sub" style="color:var(--purple)">10% → Courses</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">6 JARS FROM SALARY</div>
+      <div id="d-mini-jars"></div>
+    </div>
+  </div>
+
+  <!-- SIMULATE -->
+  <div class="sec" id="sec-simulate">
+    <div class="card">
+      <div class="card-title">📦 CAMPAIGN INPUTS</div>
+      <div class="field-row">
+        <div class="field-wrap">
+          <label class="field-lbl">TOTAL LEADS</label>
+          <input class="field" type="number" id="i-leads" value="220" oninput="calc()"/>
+        </div>
+        <div class="field-wrap">
+          <label class="field-lbl">ADS COST/LEAD ($)</label>
+          <input class="field" type="number" id="i-cpl" value="3.00" step="0.01" oninput="calc()"/>
+        </div>
+      </div>
+      <div class="slider-wrap" style="margin-top:6px">
+        <div class="slider-hdr">
+          <label class="field-lbl">CONFIRMATION RATE</label>
+          <span class="slider-val" id="sv-conf" style="color:var(--blue)">55%</span>
+        </div>
+        <input type="range" min="25" max="100" value="55" id="i-conf" style="accent-color:var(--blue)" oninput="document.getElementById('sv-conf').textContent=this.value+'%';calc()"/>
+      </div>
+      <div class="slider-wrap">
+        <div class="slider-hdr">
+          <label class="field-lbl">DELIVERY RATE (revenue only)</label>
+          <span class="slider-val" id="sv-del" style="color:var(--green)">43%</span>
+        </div>
+        <input type="range" min="20" max="100" value="43" id="i-del" style="accent-color:var(--green)" oninput="document.getElementById('sv-del').textContent=this.value+'%';calc()"/>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px">⚠️ COD fees charged on confirmed orders — not delivery rate</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💰 PRODUCT & PRICING</div>
+      <div class="field-row">
+        <div class="field-wrap">
+          <label class="field-lbl">SALE PRICE / AOV ($)</label>
+          <input class="field" type="number" id="i-aov" value="55.00" step="0.01" oninput="calc()"/>
+        </div>
+        <div class="field-wrap">
+          <label class="field-lbl">PRODUCT COST ($)</label>
+          <input class="field" type="number" id="i-prd" value="3.00" step="0.01" oninput="calc()"/>
+        </div>
+      </div>
+      <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.18);border-radius:10px;padding:10px;margin-bottom:10px">
+        <div style="font-size:9px;letter-spacing:1.5px;color:var(--green);margin-bottom:8px;font-family:'Syne',sans-serif">🌍 AUTO-LOADED FROM COUNTRY: <span id="sim-country-label">UAE</span></div>
+        <div class="field-row">
+          <div class="field-wrap">
+            <label class="field-lbl">CC/LEAD ($)</label>
+            <input class="field" type="number" id="i-cc-lead" value="0.50" step="0.01" oninput="updateCountryFee('ccLead',this.value)"/>
+          </div>
+          <div class="field-wrap">
+            <label class="field-lbl">CC/CONFIRMED ($)</label>
+            <input class="field" type="number" id="i-cc-conf" value="1.00" step="0.01" oninput="updateCountryFee('ccConf',this.value)"/>
+          </div>
+        </div>
+        <div class="field-row" style="margin-top:4px">
+          <div class="field-wrap">
+            <label class="field-lbl">CC/DELIVERED ($)</label>
+            <input class="field" type="number" id="i-cc-del" value="2.00" step="0.01" oninput="updateCountryFee('ccDel',this.value)"/>
+          </div>
+          <div class="field-wrap">
+            <label class="field-lbl">SHIPPING/CONFIRMED ($)</label>
+            <input class="field" type="number" id="i-ship" value="4.99" step="0.01" oninput="updateCountryFee('shipDel',this.value)"/>
+          </div>
+        </div>
+        <div class="field-row" style="margin-top:4px">
+          <div class="field-wrap">
+            <label class="field-lbl">DELIVERY FEE/DELIVERED ($)</label>
+            <input class="field" type="number" id="i-ship-ret" value="1.00" step="0.01" oninput="updateCountryFee('shipRet',this.value)"/>
+          </div>
+          <div class="field-wrap">
+            <label class="field-lbl">COD FEES (%)</label>
+            <input class="field" type="number" id="i-cod" value="5" step="0.1" oninput="updateCountryFee('codPct',this.value)"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 RESULTS</div>
+      <div id="sim-output"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 DELIVERY RATE SCENARIOS</div>
+      <div style="overflow-x:auto">
+        <table class="sim-table">
+          <thead><tr>
+            <th>DEL%</th><th>REVENUE</th><th>COSTS</th><th>TOOLS</th><th>PROFIT</th><th>MARGIN</th>
+          </tr></thead>
+          <tbody id="sim-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- JARS -->
+  <div class="sec" id="sec-jars">
+    <div class="hero" style="background:linear-gradient(135deg,#0F0A2A,#0A1A2A);border:1px solid rgba(167,139,250,0.25)">
+      <div class="hero-label" style="color:var(--purple)">YOUR MONTHLY SALARY</div>
+      <div class="hero-amount" style="color:var(--purple)" id="j-salary">$0.00</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:-6px">30% of net profit → split into 6 Jars</div>
+    </div>
+    <div id="jarCards"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="sec" id="sec-settings">
+    <div class="card">
+      <div class="card-title">🛠️ MONTHLY TOOLS & SUBSCRIPTIONS</div>
+      <div id="tools-list"></div>
+      <div class="field-row" style="margin-top:10px">
+        <div class="field-wrap">
+          <label class="field-lbl">TOOL NAME</label>
+          <input class="field" id="tool-name" placeholder="e.g. Shopify, AutoDS..."/>
+        </div>
+        <div class="field-wrap">
+          <label class="field-lbl">COST/MONTH ($)</label>
+          <input class="field" type="number" id="tool-cost" placeholder="39"/>
+        </div>
+      </div>
+      <button class="btn btn-green" onclick="addTool()">+ Add Tool</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+        <span style="font-size:13px;color:var(--muted2)">Total Monthly Tools:</span>
+        <span style="font-family:'DM Mono',monospace;font-size:17px;color:var(--red);font-weight:700" id="tools-total">$0.00</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌍 GCC COUNTRY FEES (COD NETWORK)</div>
+      <div id="country-settings-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📦 PRODUCT TYPE</div>
+      <div style="display:flex;gap:8px">
+        <button id="pt-gadget" onclick="setProductType('gadget')" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(0,229,160,0.3);background:rgba(0,229,160,0.1);color:var(--green);font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;font-size:13px">🔧 Gadget</button>
+        <button id="pt-cosmetic" onclick="setProductType('cosmetic')" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;font-size:13px">💄 Cosmetic</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center" id="pt-info">Gadget — CC: $0.50 lead · $1.00 conf · $2.00 del</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── JARS CONFIG ──
+const JARS=[
+  {id:'necessities',label:'Necessities',emoji:'🏠',pct:50,color:'#F59E0B',bg:'rgba(245,158,11,0.1)',faint:'rgba(245,158,11,0.25)',
+   examples:['🍕 Food & groceries','🏠 Rent','💡 Utilities','🚗 Transport','📱 Phone bill'],
+   tip:'⚡ Survival money',tipText:'Keep under 50%. Cook at home, cut subscriptions.'},
+  {id:'freedom',label:'Financial Freedom',emoji:'💰',pct:10,color:'#10B981',bg:'rgba(16,185,129,0.1)',faint:'rgba(16,185,129,0.25)',
+   examples:['📈 ETF & Index funds','🥇 Gold','🏘️ Real estate fund','₿ Crypto (small %)'],
+   tip:'🔒 NEVER spend this!',tipText:'This ONLY grows. One day it will replace your salary with passive income.'},
+  {id:'education',label:'Education',emoji:'📚',pct:10,color:'#3B82F6',bg:'rgba(59,130,246,0.1)',faint:'rgba(59,130,246,0.25)',
+   examples:['💻 COD & dropship courses','📖 Business books','🎯 Facebook Ads courses'],
+   tip:'📊 Highest ROI',tipText:'Every $ in education returns 10x. Learn advanced COD strategies.'},
+  {id:'savings',label:'Long-term Savings',emoji:'🎯',pct:10,color:'#8B5CF6',bg:'rgba(139,92,246,0.1)',faint:'rgba(139,92,246,0.25)',
+   examples:['🏠 Apartment','🚗 Car cash','✈️ Dream vacation','💼 Business equipment'],
+   tip:'🗓️ Save → Reach → Spend → Restart',tipText:'Save for one big goal. Reach it, spend it all, restart. No loans!'},
+  {id:'entertainment',label:'Entertainment',emoji:'🎉',pct:10,color:'#EC4899',bg:'rgba(236,72,153,0.1)',faint:'rgba(236,72,153,0.25)',
+   examples:['🍽️ Nice restaurants','🎬 Cinema','🛍️ Shopping','🏖️ Weekend trips'],
+   tip:'🎊 Enjoy guilt-free!',tipText:'You MUST spend this monthly. Money = joy, not stress.'},
+  {id:'giving',label:'Giving',emoji:'🎁',pct:10,color:'#EF4444',bg:'rgba(239,68,68,0.1)',faint:'rgba(239,68,68,0.25)',
+   examples:['🕌 Sadaqah & Zakat','🎁 Family gifts','🤝 Help a friend','🌙 Ramadan'],
+   tip:'❤️ Law of abundance',tipText:'"The more you give, the more you receive."'},
+];
+
+// ── GCC COUNTRY DATA (from COD Network contract) ──
+const COUNTRIES={
+  // shipDel = shipping fee per CONFIRMED order
+  // shipRet = delivery fee per DELIVERED order
+  KSA:{flag:'🇸🇦',name:'KSA',ccLead:0.50,ccConf:1.00,ccDel:2.00,shipDel:2.99,shipRet:2.00,codPct:5},
+  UAE:{flag:'🇦🇪',name:'UAE',ccLead:0.50,ccConf:1.00,ccDel:2.00,shipDel:4.99,shipRet:1.00,codPct:5},
+  QTR:{flag:'🇶🇦',name:'QTR',ccLead:0.50,ccConf:1.00,ccDel:2.00,shipDel:5.99,shipRet:1.00,codPct:5},
+  KWT:{flag:'🇰🇼',name:'KWT',ccLead:0.50,ccConf:1.00,ccDel:2.00,shipDel:5.99,shipRet:1.00,codPct:5},
+  BHR:{flag:'🇧🇭',name:'BHR',ccLead:0.50,ccConf:1.00,ccDel:2.00,shipDel:5.99,shipRet:1.00,codPct:5},
+  OMN:{flag:'🇴🇲',name:'OMN',ccLead:0.50,ccConf:1.00,ccDel:2.00,shipDel:5.99,shipRet:1.00,codPct:5},
+};
+
+// ── STATE ──
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let cm=new Date().getMonth(), cy=new Date().getFullYear();
+let selectedCountry='KSA', productType='cosmetic';
+let tools=[], customFees={};
+let lastSalary=0;
+
+// ── AUTO-SAVE ──
+function save(){
+  try{
+    // Save campaign inputs AND country-specific fees separately
+    const countryFeeFields={};
+    Object.keys(COUNTRIES).forEach(code=>{
+      if(customFees[code]) countryFeeFields[code]=customFees[code];
+    });
+    const state={
+      country:selectedCountry, productType,
+      leads:document.getElementById('i-leads').value,
+      cpl:document.getElementById('i-cpl').value,
+      conf:document.getElementById('i-conf').value,
+      del:document.getElementById('i-del').value,
+      aov:document.getElementById('i-aov').value,
+      prd:document.getElementById('i-prd').value,
+      month:cm, year:cy,
+      // Save current country's fee fields
+      currentFees:{
+        ccLead:document.getElementById('i-cc-lead').value,
+        ccConf:document.getElementById('i-cc-conf').value,
+        ccDel:document.getElementById('i-cc-del').value,
+        shipDel:document.getElementById('i-ship').value,
+        shipRet:document.getElementById('i-ship-ret').value,
+        codPct:document.getElementById('i-cod').value,
+      }
+    };
+    localStorage.setItem('cod_state', JSON.stringify(state));
+    localStorage.setItem('cod_tools', JSON.stringify(tools));
+    localStorage.setItem('cod_fees', JSON.stringify(customFees));
+    showSaved();
+  }catch(e){}
+}
+function load(){
+  try{
+    const t=localStorage.getItem('cod_tools');
+    const f=localStorage.getItem('cod_fees');
+    const s=localStorage.getItem('cod_state');
+    if(t)tools=JSON.parse(t);
+    if(f)customFees=JSON.parse(f);
+    if(s){
+      const st=JSON.parse(s);
+      if(st.country)selectedCountry=st.country;
+      if(st.productType)productType=st.productType; else productType='cosmetic';
+      if(st.month!==undefined)cm=st.month;
+      if(st.year!==undefined)cy=st.year;
+      if(st.leads)document.getElementById('i-leads').value=st.leads;
+      if(st.cpl)document.getElementById('i-cpl').value=st.cpl;
+      if(st.conf){document.getElementById('i-conf').value=st.conf;document.getElementById('sv-conf').textContent=st.conf+'%';}
+      if(st.del){document.getElementById('i-del').value=st.del;document.getElementById('sv-del').textContent=st.del+'%';}
+      if(st.aov)document.getElementById('i-aov').value=st.aov;
+      if(st.prd)document.getElementById('i-prd').value=st.prd;
+      // Restore saved fee fields for current country
+      if(st.currentFees){
+        document.getElementById('i-cc-lead').value=st.currentFees.ccLead||0.50;
+        document.getElementById('i-cc-conf').value=st.currentFees.ccConf||1.00;
+        document.getElementById('i-cc-del').value=st.currentFees.ccDel||2.00;
+        document.getElementById('i-ship').value=st.currentFees.shipDel||5.99;
+        document.getElementById('i-ship-ret').value=st.currentFees.shipRet||4.99;
+        document.getElementById('i-cod').value=st.currentFees.codPct||5;
+      }
+    }
+  }catch(e){}
+}
+function showSaved(){
+  const b=document.getElementById('save-badge');
+  b.style.opacity='1';clearTimeout(b._t);
+  b._t=setTimeout(()=>b.style.opacity='0',1500);
+}
+
+// ── HELPERS ──
+function fmt(n,d=2){return '$'+(+n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function fmtP(n){return Math.round(n)+'%';}
+function getToolsTotal(){return tools.reduce((s,t)=>s+t.cost,0);}
+
+function chMo(d){
+  cm+=d;if(cm>11){cm=0;cy++;}if(cm<0){cm=11;cy--;}
+  document.getElementById('mlbl-m').textContent=MONTHS[cm];
+  document.getElementById('mlbl-y').textContent=cy;
+  save();
+}
+
+function sw(name,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sec-'+name).classList.add('active');
+  if(name==='settings')renderSettings();
+}
+
+// ── COUNTRY ──
+function renderCountryBar(){
+  document.getElementById('countryBar').innerHTML=Object.keys(COUNTRIES).map(k=>{
+    const c=COUNTRIES[k];
+    return `<button class="c-btn ${k===selectedCountry?'active':''}" onclick="selectCountry('${k}')">
+      <span class="c-flag">${c.flag}</span>
+      <span class="c-name">${c.name}</span>
+    </button>`;
+  }).join('');
+}
+function updateCountryFee(key, val){
+  // Save fee change to JS state for current country
+  if(!customFees[selectedCountry]) customFees[selectedCountry]={...COUNTRIES[selectedCountry]};
+  customFees[selectedCountry][key]=parseFloat(val)||0;
+  save();calc();
+}
+
+function selectCountry(code){
+  // Always switch — update display fields to show new country fees
+  selectedCountry=code;
+  renderCountryBar();
+  // Update display fields (for reference only — calc reads from JS state)
+  const f=customFees[code]||COUNTRIES[code];
+  document.getElementById('i-cc-lead').value=f.ccLead;
+  document.getElementById('i-cc-conf').value=f.ccConf;
+  document.getElementById('i-cc-del').value=f.ccDel;
+  document.getElementById('i-ship').value=f.shipDel;
+  document.getElementById('i-ship-ret').value=f.shipRet;
+  document.getElementById('i-cod').value=f.codPct;
+  document.getElementById('d-country-name').textContent=COUNTRIES[code].name+' '+COUNTRIES[code].flag;
+  document.getElementById('sim-country-label').textContent=COUNTRIES[code].name;
+  save();calc();
+}
+function applyCountryFees(code){
+  // ONLY update COD Network fees — never touch CPL, AOV, leads, product cost!
+  const f=customFees[code]||COUNTRIES[code];
+  document.getElementById('i-cc-lead').value=f.ccLead;
+  document.getElementById('i-cc-conf').value=f.ccConf;
+  document.getElementById('i-cc-del').value=f.ccDel;
+  document.getElementById('i-ship').value=f.shipDel;
+  document.getElementById('i-ship-ret').value=f.shipRet;
+  document.getElementById('i-cod').value=f.codPct;
+  // CPL, AOV, leads, product cost, conf rate, del rate → NEVER touched here!
+}
+
+// ── TOOLS ──
+function addTool(){
+  const name=document.getElementById('tool-name').value.trim();
+  const cost=parseFloat(document.getElementById('tool-cost').value)||0;
+  if(!name||cost<=0)return;
+  tools.push({id:Date.now(),name,cost});
+  document.getElementById('tool-name').value='';
+  document.getElementById('tool-cost').value='';
+  save();renderSettings();calc();
+}
+function removeTool(id){
+  tools=tools.filter(t=>t.id!=id);
+  save();renderSettings();calc();
+}
+
+// ── PRODUCT TYPE ──
+function setProductType(type){
+  productType=type;
+  const gadgetCC={ccLead:0.50,ccConf:1.00,ccDel:2.00};
+  const cosmeticCC={ccLead:0.50,ccConf:2.00,ccDel:3.00};
+  const cc=type==='gadget'?gadgetCC:cosmeticCC;
+  document.getElementById('i-cc-lead').value=cc.ccLead;
+  document.getElementById('i-cc-conf').value=cc.ccConf;
+  document.getElementById('i-cc-del').value=cc.ccDel;
+  document.getElementById('pt-gadget').style.background=type==='gadget'?'rgba(0,229,160,0.1)':'transparent';
+  document.getElementById('pt-gadget').style.color=type==='gadget'?'var(--green)':'var(--muted)';
+  document.getElementById('pt-gadget').style.borderColor=type==='gadget'?'rgba(0,229,160,0.3)':'var(--border)';
+  document.getElementById('pt-cosmetic').style.background=type==='cosmetic'?'rgba(79,142,255,0.1)':'transparent';
+  document.getElementById('pt-cosmetic').style.color=type==='cosmetic'?'var(--blue)':'var(--muted)';
+  document.getElementById('pt-cosmetic').style.borderColor=type==='cosmetic'?'rgba(79,142,255,0.3)':'var(--border)';
+  document.getElementById('pt-info').textContent=`${type==='gadget'?'Gadget':'Cosmetic'} — CC: ${fmt(cc.ccLead,2)} lead · ${fmt(cc.ccConf,2)} conf · ${fmt(cc.ccDel,2)} del`;
+  save();calc();
+}
+
+// ── SETTINGS ──
+function renderSettings(){
+  // Tools
+  const total=getToolsTotal();
+  document.getElementById('tools-total').textContent=fmt(total);
+  document.getElementById('tools-list').innerHTML=tools.length?tools.map(t=>`
+    <div class="tool-item">
+      <span class="tool-name">${t.name}</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tool-cost">${fmt(t.cost)}/mo</span>
+        <button class="del-btn" onclick="removeTool(${t.id})">✕</button>
+      </div>
+    </div>`).join(''):`<div style="font-size:12px;color:var(--muted);padding:8px 0">No tools yet. Add Shopify, AutoDS, etc.</div>`;
+
+  // Country fees
+  document.getElementById('country-settings-list').innerHTML=Object.keys(COUNTRIES).map(code=>{
+    const def=COUNTRIES[code];
+    const custom=customFees[code]||{};
+    return `<div style="background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="font-size:18px">${def.flag}</span>
+        <span style="font-size:14px;font-weight:700;font-family:'Syne',sans-serif">${def.name}</span>
+        <span style="font-size:10px;color:var(--muted);margin-left:auto">COD: ${def.codPct}%</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        ${['ccLead:CC/LEAD','ccConf:CC/CONF','ccDel:CC/DEL','shipDel:SHIP/DEL','shipRet:SHIP/RET','codPct:COD%'].map(f=>{
+          const [key,lbl]=f.split(':');
+          return `<div>
+            <label class="field-lbl">${lbl} ($)</label>
+            <input class="field" type="number" step="0.01" value="${custom[key]||def[key]}" id="cs-${code}-${key}" oninput="saveCustomFee('${code}')"/>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveCustomFee(code){
+  const keys=['ccLead','ccConf','ccDel','shipDel','shipRet','codPct'];
+  customFees[code]={};
+  keys.forEach(k=>{
+    customFees[code][k]=+document.getElementById(`cs-${code}-${k}`).value||0;
+  });
+  if(code===selectedCountry)applyCountryFees(code);
+  save();calc();
+}
+
+// ── CORE CALC (CORRECT FORMULA) ──
+function getInputs(){
+  // Campaign inputs — from DOM (user editable)
+  const campaign={
+    leads:+document.getElementById('i-leads').value||0,
+    cpl:+document.getElementById('i-cpl').value||0,
+    confRate:+document.getElementById('i-conf').value/100,
+    delRate:+document.getElementById('i-del').value/100,
+    aov:+document.getElementById('i-aov').value||0,
+    prdCost:+document.getElementById('i-prd').value||0,
+  };
+  // Country fees — ALWAYS from JS state, never from DOM!
+  // This means switching country never changes campaign inputs
+  const fees=customFees[selectedCountry]||COUNTRIES[selectedCountry];
+  return{
+    ...campaign,
+    ccLead:fees.ccLead,
+    ccConf:fees.ccConf,
+    ccDel:fees.ccDel,
+    shipDel:fees.shipDel,
+    shipRet:fees.shipRet,
+    codPct:fees.codPct/100,
+  };
+}
+
+function calcProfit(inp, delOverride=null){
+  const dr=delOverride!==null?delOverride:inp.delRate;
+  const leads=inp.leads;
+  // Match Excel EXACTLY — use raw decimal values for fee calculations
+  // Excel keeps decimals in intermediate steps (69.68, 30.1 etc.)
+  const confirmedExact=leads*inp.confRate;        // 69.68 (raw)
+  const deliveredExact=confirmedExact*dr;          // 29.96 (raw)
+  const returnedExact=confirmedExact-deliveredExact; // 39.72 (raw)
+  // Display values (rounded for showing)
+  const confirmed=Math.round(confirmedExact);
+  const delivered=Math.round(deliveredExact);
+  const returned=Math.round(returnedExact); // cancelled/returned = confirmed - delivered
+  const toolsCost=getToolsTotal();
+
+  // ── EXACT COD NETWORK FEE LOGIC (from Excel) ──
+  // ── EXACT EXCEL FORMULA (verified $0 difference) ──
+  const revenue=deliveredExact*inp.aov;           // exact revenue
+  const adsCost=leads*inp.cpl;                    // per lead
+  const ccLeadCost=leads*inp.ccLead;              // per lead
+  const ccConfCost=confirmedExact*inp.ccConf;     // per confirmed (exact decimal)
+  const ccDelCost=deliveredExact*inp.ccDel;       // per delivered (exact decimal)
+  const shipDelCost=confirmedExact*inp.shipDel;   // shipping per CONFIRMED (shipped out)
+  const shipRetCost=deliveredExact*inp.shipRet;   // delivery fee per DELIVERED
+  const codFees=revenue*inp.codPct;               // % of revenue
+  const prdCost=deliveredExact*inp.prdCost;       // product per delivered
+
+  const totalCosts=adsCost+ccLeadCost+ccConfCost+ccDelCost+prdCost+shipDelCost+shipRetCost+codFees+toolsCost;
+  const profit=revenue-totalCosts;
+  const margin=revenue>0?(profit/revenue)*100:0;
+  const maxCpl=leads>0?(profit+adsCost)/leads:0;
+
+  return{leads,confirmed,delivered,returned,revenue,
+    adsCost,ccLeadCost,ccConfCost,ccDelCost,prdCost,shipDelCost,shipRetCost,codFees,toolsCost,
+    totalCosts,profit,margin,maxCpl,dr};
+}
+
+function calc(){
+  const inp=getInputs();
+  const r=calcProfit(inp);
+  const np=Math.max(r.profit,0);
+  lastSalary=np*0.3;
+
+  // Dashboard
+  document.getElementById('d-profit').textContent=fmt(r.profit);
+  document.getElementById('d-profit').style.color=r.profit>=0?'var(--green)':'var(--red)';
+  document.getElementById('d-revenue').textContent=fmt(r.revenue);
+  document.getElementById('d-costs').textContent=fmt(r.totalCosts);
+  document.getElementById('d-margin').textContent=fmtP(r.margin);
+  document.getElementById('d-confrate').textContent=fmtP(inp.confRate*100);
+  document.getElementById('d-delrate').textContent=fmtP(inp.delRate*100);
+  document.getElementById('d-maxcpl').textContent=fmt(r.maxCpl);
+  document.getElementById('d-reinvest').textContent=fmt(np*0.5);
+  document.getElementById('d-salary').textContent=fmt(np*0.3);
+  document.getElementById('d-bizsav').textContent=fmt(np*0.1);
+  document.getElementById('d-bizeduc').textContent=fmt(np*0.1);
+
+  // Tools warning
+  const tw=document.getElementById('d-tools-warning');
+  if(r.toolsCost>0){tw.style.display='block';document.getElementById('d-tools-warn').textContent=fmt(r.toolsCost);}
+  else tw.style.display='none';
+
+  // Funnel
+  document.getElementById('d-funnel').innerHTML=[
+    {ico:'📣',lbl:'Leads Generated',sub:`${r.leads} leads @ ${fmt(inp.cpl)} ads/lead`,val:r.leads,color:'var(--blue)',pct:100},
+    {ico:'✅',lbl:'Confirmed Orders',sub:`${fmtP(inp.confRate*100)} conf rate — CC fees charged here`,val:r.confirmed,color:'var(--gold)',pct:inp.confRate*100},
+    {ico:'🚚',lbl:'Delivered Orders',sub:`${fmtP(inp.delRate*100)} del rate — COD collected`,val:r.delivered,color:'var(--green)',pct:inp.delRate*100},
+    {ico:'↩️',lbl:'Cancelled/Returned',sub:`${r.returned} orders — return shipping only`,val:r.returned,color:'var(--red)',pct:null},
+    {ico:'💵',lbl:'Revenue Collected',sub:`${r.delivered} × ${fmt(inp.aov)} AOV`,val:fmt(r.revenue),color:'var(--green)',isAmt:true},
+  ].map((s,i,arr)=>`
+    <div class="funnel-step" style="border-color:${s.color}22">
+      <div class="f-ico">${s.ico}</div>
+      <div class="f-text">
+        <div class="f-lbl">${s.lbl}</div>
+        <div class="f-sub">${s.sub}</div>
+        ${s.pct!==null?`<div class="prog"><div class="prog-fill" style="width:${s.pct}%;background:${s.color}"></div></div>`:''}
+      </div>
+      <div class="f-val" style="color:${s.color}">${s.isAmt?s.val:s.val}</div>
+    </div>${i<arr.length-1?'<div class="f-arrow">↓</div>':''}`).join('');
+
+  // Cost breakdown
+  const costs=[
+    {name:'🎯 Ads (per lead)',val:r.adsCost,sub:`${r.leads} × ${fmt(inp.cpl)}`},
+    {name:'📞 CC/Lead fee',val:r.ccLeadCost,sub:`${r.leads} × ${fmt(inp.ccLead)}`},
+    {name:'📞 CC/Confirmed fee',val:r.ccConfCost,sub:`${r.confirmed} confirmed × ${fmt(inp.ccConf)}`},
+    {name:'📞 CC/Delivered fee',val:r.ccDelCost,sub:`${r.delivered} delivered × ${fmt(inp.ccDel)}`},
+    {name:'📦 Product cost',val:r.prdCost,sub:`${r.delivered} delivered × ${fmt(inp.prdCost)}`},
+    {name:'🚢 Shipping fees',val:r.shipDelCost,sub:`${r.confirmed} confirmed × ${fmt(inp.shipDel)}`},
+    {name:'📦 Delivery fees',val:r.shipRetCost,sub:`${r.delivered} delivered × ${fmt(inp.shipRet)}`},
+    {name:`🏦 COD fees (${fmtP(inp.codPct*100)})`,val:r.codFees,sub:`${fmtP(inp.codPct*100)} of ${fmt(r.revenue)} revenue`},
+    ...(r.toolsCost>0?[{name:'🛠️ Monthly tools',val:r.toolsCost,sub:`${tools.length} subscriptions`}]:[]),
+  ];
+  document.getElementById('d-costs-bd').innerHTML=costs.map(c=>`
+    <div class="cost-row">
+      <div><div class="cost-name">${c.name}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${c.sub}</div></div>
+      <div class="cost-val" style="color:var(--red)">${fmt(c.val)}</div>
+    </div>`).join('')+`
+    <div class="cost-row" style="border-top:2px solid var(--border);padding-top:10px;margin-top:4px">
+      <div class="cost-name" style="font-weight:700;color:var(--text);font-size:13px">TOTAL COSTS</div>
+      <div class="cost-val" style="color:var(--red);font-weight:700;font-size:14px">${fmt(r.totalCosts)}</div>
+    </div>`;
+
+  // Mini jars
+  document.getElementById('d-mini-jars').innerHTML=JARS.map(j=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px">${j.emoji} ${j.label}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:13px;color:${j.color}">${fmt(np*0.3*j.pct/100)}</span>
+    </div>`).join('');
+
+  // Sim results
+  document.getElementById('sim-output').innerHTML=`<div class="g2" style="margin-bottom:0">
+    <div class="stat-box" style="background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.2)">
+      <div class="lbl" style="color:var(--green)">NET PROFIT</div>
+      <div class="val" style="color:${r.profit>=0?'var(--green)':'var(--red)'}">${fmt(r.profit)}</div>
+      <div class="sub">After all costs</div>
+    </div>
+    <div class="stat-box" style="background:rgba(255,209,102,0.08);border-color:rgba(255,209,102,0.2)">
+      <div class="lbl" style="color:var(--gold)">MARGIN</div>
+      <div class="val" style="color:var(--gold)">${fmtP(r.margin)}</div>
+      <div class="sub">Profit margin</div>
+    </div>
+    <div class="stat-box" style="background:rgba(79,142,255,0.08);border-color:rgba(79,142,255,0.2)">
+      <div class="lbl" style="color:var(--blue)">MAX CPL</div>
+      <div class="val" style="color:var(--blue)">${fmt(r.maxCpl)}</div>
+      <div class="sub">Break-even CPL</div>
+    </div>
+    <div class="stat-box" style="background:rgba(167,139,250,0.08);border-color:rgba(167,139,250,0.2)">
+      <div class="lbl" style="color:var(--purple)">YOUR SALARY</div>
+      <div class="val" style="color:var(--purple)">${fmt(np*0.3)}</div>
+      <div class="sub">30% → 6 Jars</div>
+    </div>
+  </div>`;
+
+  // Scenario table
+  document.getElementById('sim-tbody').innerHTML=[0.25,0.30,0.35,0.38,0.40,0.43,0.45,0.48,0.50,0.52,0.55,0.58,0.60,0.65,0.70,0.75,0.80].map(dr=>{
+    const sc=calcProfit(inp,dr);
+    const isCur=Math.round(dr*100)===Math.round(inp.delRate*100);
+    const pc=sc.profit>0?'pos':sc.profit<0?'neg':'neu';
+    return `<tr class="${isCur?'cur':''}">
+      <td>${fmtP(dr*100)}</td>
+      <td>${fmt(sc.revenue,0)}</td>
+      <td>${fmt(sc.totalCosts-sc.toolsCost,0)}</td>
+      <td style="color:var(--red)">${fmt(sc.toolsCost,0)}</td>
+      <td class="${isCur?'':pc}">${fmt(sc.profit,0)}</td>
+      <td>${fmtP(sc.margin)}</td>
+    </tr>`;
+  }).join('');
+
+  // Jars tab
+  document.getElementById('j-salary').textContent=fmt(np*0.3);
+  renderJars(np*0.3);
+
+  save();
+}
+
+function renderJars(sal){
+  document.getElementById('jarCards').innerHTML=JARS.map(jar=>{
+    const amt=sal*jar.pct/100;
+    const isExp=jar._exp;
+    return `<div class="jar-card" style="${isExp?`border-color:${jar.color}`:''}" onclick="toggleJar('${jar.id}')">
+      <div class="jar-hdr">
+        <div class="jar-left">
+          <div class="jar-ico" style="background:${jar.bg}">${jar.emoji}</div>
+          <div><div class="jar-name">${jar.label}</div><div class="jar-pct">${jar.pct}% of salary</div></div>
+        </div>
+        <div style="text-align:right">
+          <div class="jar-amount" style="color:${jar.color}">${fmt(amt)}</div>
+          <div class="jar-sub">per month</div>
+        </div>
+      </div>
+      <div class="prog"><div class="prog-fill" style="width:${jar.pct*2}%;background:${jar.color}"></div></div>
+      <div class="ex-panel ${isExp?'open':''}">
+        <div class="ex-ttl">WHERE TO USE THIS ${jar.pct}%</div>
+        <div class="ex-chips">${jar.examples.map(e=>`<span class="ex-chip" style="background:${jar.bg};color:${jar.color};border:1px solid ${jar.faint}">${e}</span>`).join('')}</div>
+        <div class="tip" style="border-color:${jar.color};background:${jar.bg}">
+          <strong style="color:${jar.color}">${jar.tip}</strong>${jar.tipText}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleJar(id){
+  const jar=JARS.find(j=>j.id===id);
+  jar._exp=!jar._exp;
+  renderJars(lastSalary);
+}
+
+// ── PWA: custom icon + dynamic manifest ──
+function drawAppIcon(size){
+  const c=document.createElement('canvas');
+  c.width=c.height=size;
+  const ctx=c.getContext('2d');
+  const r=size*0.22;
+  // Rounded background
+  const bg=ctx.createLinearGradient(0,0,size,size);
+  bg.addColorStop(0,'#0F172A');
+  bg.addColorStop(1,'#020617');
+  ctx.fillStyle=bg;
+  ctx.beginPath();
+  if(ctx.roundRect){ctx.roundRect(0,0,size,size,r);}
+  else{ctx.rect(0,0,size,size);}
+  ctx.fill();
+  // Subtle inner glow
+  const glow=ctx.createRadialGradient(size/2,size*0.4,size*0.05,size/2,size*0.4,size*0.6);
+  glow.addColorStop(0,'rgba(0,229,160,0.25)');
+  glow.addColorStop(1,'rgba(0,229,160,0)');
+  ctx.fillStyle=glow;
+  ctx.fillRect(0,0,size,size);
+  // Diamond
+  const cx=size/2, cy=size*0.5;
+  const grad=ctx.createLinearGradient(cx-size*0.3,cy-size*0.3,cx+size*0.3,cy+size*0.3);
+  grad.addColorStop(0,'#00E5A0');
+  grad.addColorStop(0.55,'#3FB6FF');
+  grad.addColorStop(1,'#4F8EFF');
+  ctx.shadowColor='rgba(0,229,160,0.55)';
+  ctx.shadowBlur=size*0.08;
+  ctx.fillStyle=grad;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy-size*0.30);
+  ctx.lineTo(cx+size*0.27, cy-size*0.05);
+  ctx.lineTo(cx, cy+size*0.32);
+  ctx.lineTo(cx-size*0.27, cy-size*0.05);
+  ctx.closePath();
+  ctx.fill();
+  ctx.shadowBlur=0;
+  // Facets
+  ctx.strokeStyle='rgba(255,255,255,0.45)';
+  ctx.lineWidth=Math.max(1,size*0.006);
+  ctx.beginPath();
+  ctx.moveTo(cx-size*0.27, cy-size*0.05);
+  ctx.lineTo(cx+size*0.27, cy-size*0.05);
+  ctx.moveTo(cx, cy-size*0.30);
+  ctx.lineTo(cx-size*0.13, cy-size*0.05);
+  ctx.lineTo(cx, cy+size*0.32);
+  ctx.moveTo(cx, cy-size*0.30);
+  ctx.lineTo(cx+size*0.13, cy-size*0.05);
+  ctx.lineTo(cx, cy+size*0.32);
+  ctx.stroke();
+  // Top highlight
+  ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.beginPath();
+  ctx.moveTo(cx-size*0.13, cy-size*0.05);
+  ctx.lineTo(cx, cy-size*0.30);
+  ctx.lineTo(cx+size*0.13, cy-size*0.05);
+  ctx.closePath();
+  ctx.fill();
+  // $ glyph
+  ctx.fillStyle='#0B1220';
+  ctx.font=`900 ${size*0.16}px "Arial Black", Arial, sans-serif`;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText('$', cx, cy+size*0.06);
+  return c.toDataURL('image/png');
+}
+
+function setupPWA(){
+  try{
+    const icon192=drawAppIcon(192);
+    const icon512=drawAppIcon(512);
+    document.getElementById('apple-touch-icon-link').href=icon512;
+    document.getElementById('favicon-link').href=icon192;
+    const manifest={
+      name:'COD Empire — Mehdi',
+      short_name:'COD Empire',
+      description:'GCC COD Dropshipping Dashboard',
+      start_url:'./',
+      scope:'./',
+      display:'standalone',
+      orientation:'portrait',
+      background_color:'#060A12',
+      theme_color:'#00E5A0',
+      icons:[
+        {src:icon192,sizes:'192x192',type:'image/png',purpose:'any'},
+        {src:icon512,sizes:'512x512',type:'image/png',purpose:'any'},
+        {src:icon192,sizes:'192x192',type:'image/png',purpose:'maskable'},
+        {src:icon512,sizes:'512x512',type:'image/png',purpose:'maskable'},
+      ]
+    };
+    const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+    document.getElementById('manifest-link').href=URL.createObjectURL(blob);
+  }catch(e){console.log('Icon setup failed:',e);}
+
+  // Service worker — required for installability. Works on https:// or http://localhost.
+  if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+    const swCode=`self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(clients.claim()));self.addEventListener('fetch',e=>{});`;
+    const swBlob=new Blob([swCode],{type:'application/javascript'});
+    const swUrl=URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(e=>console.log('SW:',e.message));
+  }
+}
+setupPWA();
+
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  document.getElementById('install-btn').style.display='flex';
+});
+window.addEventListener('appinstalled',()=>{
+  deferredPrompt=null;
+  document.getElementById('install-btn').style.display='none';
+});
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{deferredPrompt=null;});
+  } else if(location.protocol==='file:'){
+    alert('To install this app you need to open it via a web server (not file://).\n\nQuickest way: open a terminal in this folder and run:\n  python -m http.server 8080\nThen open http://localhost:8080/cod-empire-final.html in Chrome/Edge and click Install.');
+  } else {
+    alert('Tap Chrome menu ⋮ → Install App or Add to Home Screen');
+  }
+}
+
+// ── INIT ──
+load();
+document.getElementById('mlbl-m').textContent=MONTHS[cm];
+document.getElementById('mlbl-y').textContent=cy;
+renderCountryBar();
+applyCountryFees(selectedCountry);
+document.getElementById('d-country-name').textContent=COUNTRIES[selectedCountry].name+' '+COUNTRIES[selectedCountry].flag;
+document.getElementById('sim-country-label').textContent=COUNTRIES[selectedCountry].name;
+setProductType(productType||'cosmetic');
+renderSettings();
+calc();
+</script>
+</body>
+</html>
